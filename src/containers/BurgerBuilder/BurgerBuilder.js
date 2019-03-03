@@ -52,12 +52,20 @@ class BurgerBuilder extends Component {
     remo
 
     render() {
+        const emptyIngredientInfo = {
+            ...this.state.ingredients
+        };
+        for (let key in emptyIngredientInfo) {
+            emptyIngredientInfo[key] = emptyIngredientInfo[key] <= 0;
+        }
+
         return (
             <React.Fragment>
                 <Burger ingredients={this.state.ingredients} />
                 <BuildControls
                     ingredientAdded={this.addIngredientHandler}
-                    ingredientRemoved={this.removeIngredientHandler} />
+                    ingredientRemoved={this.removeIngredientHandler}
+                    emptyIngredientInfo={emptyIngredientInfo} />
             </React.Fragment>
         );
     }
