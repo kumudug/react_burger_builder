@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 
 import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
+import Model from '../../components/UI/Model/Model';
+import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 
 const INGREDIENT_PRICES = {
     salad: 0.5,
@@ -12,17 +14,21 @@ const INGREDIENT_PRICES = {
 
 class BurgerBuilder extends Component {
 
-    state = {
-        ingredients: {
-            salad: 0,
-            bacon: 0,
-            cheese: 0,
-            meat: 0
-        },
-        totalPrice: 4,
-        purchasable: false,
-        purchasing: false
-    };
+    getStartingState() {
+        return {
+            ingredients: {
+                salad: 0,
+                bacon: 0,
+                cheese: 0,
+                meat: 0
+            },
+            totalPrice: 4,
+            purchasable: false,
+            purchasing: false
+        };
+    }
+
+    state = this.getStartingState();
 
     updatePurchaseState(latestIngredients) {
         const ingredients = {
@@ -49,7 +55,7 @@ class BurgerBuilder extends Component {
             totalPrice: updatedPrice
         });
         this.updatePurchaseState(updatedIngredients);
-    };
+    }
 
     removeIngredientHandler = (type) => {
         const updatedIngredients = {
@@ -65,11 +71,21 @@ class BurgerBuilder extends Component {
             });
         }
         this.updatePurchaseState(updatedIngredients);
-    };
+    }
 
     purchaseHandler = () => {
         this.setState({ purchasing: true });
-    };
+    }
+
+    purchaseCanceledHandler = () => {
+        this.setState({ purchasing: false });
+    }
+
+    purchaseContinueHandler = () => {
+        this.setState(this.getStartingState());
+        alert("Purchase Complete!");
+    }
+
     render() {
         const emptyIngredientInfo = {
             ...this.state.ingredients
@@ -80,6 +96,12 @@ class BurgerBuilder extends Component {
 
         return (
             <React.Fragment>
+                <Model show={this.state.purchasing} cancel={this.purchaseCanceledHandler}>
+                    <OrderSummary
+                        ingredients={this.state.ingredients}
+                        cancel={this.purchaseCanceledHandler}
+                        continue={this.purchaseContinueHandler} />
+                </Model>
                 <Burger ingredients={this.state.ingredients} />
                 <BuildControls
                     ingredientAdded={this.addIngredientHandler}
