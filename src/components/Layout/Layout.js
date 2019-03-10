@@ -13,10 +13,16 @@ class Layout extends Component {
         this.setState({ showSideDrawer: false });
     }
 
+    sideDrawerToggleHandlder = () => {
+        this.setState((prevState) => {
+            return { showSideDrawer: !prevState.showSideDrawer };
+        });
+    }
+
     render() {
         return (
             <React.Fragment>
-                <Toolbar />
+                <Toolbar drawerToggleClicked={this.sideDrawerToggleHandlder} />
                 <SideDrawer open={this.state.showSideDrawer} closed={this.sideDrawerClosedHandler} />
                 <main className={styles.Content}>
                     {this.props.children}
