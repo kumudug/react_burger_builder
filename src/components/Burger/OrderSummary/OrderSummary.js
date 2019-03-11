@@ -1,8 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import Button from '../../UI/Button/Button';
 
 const orderSummary = (props) => {
+
+    useEffect(() => {
+        console.log('Order Summary rendered');
+    });
+
     const ingredientSummary = Object.keys(props.ingredients)
         .map(igKey => {
             return <li key={igKey}>
