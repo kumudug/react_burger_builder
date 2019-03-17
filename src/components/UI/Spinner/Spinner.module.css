@@ -21,7 +21,7 @@
   .Loader:before {
     width: 50%;
     height: 50%;
-    background: #341137;
+    background: white;
     border-radius: 100% 0 0 0;
     position: absolute;
     top: 0;
