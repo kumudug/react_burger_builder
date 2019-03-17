@@ -4,6 +4,7 @@ import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import Model from '../../components/UI/Model/Model';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
+import axios from '../../axios-orders';
 
 const INGREDIENT_PRICES = {
     salad: 0.5,
@@ -82,6 +83,25 @@ class BurgerBuilder extends Component {
     }
 
     purchaseContinueHandler = () => {
+        const order = {
+            ingredients: this.state.ingredients,
+            price: this.state.totalPrice,
+            customer: {
+                name: 'Name1 Surname',
+                address: {
+                    street: 'Test Str1',
+                    zipCode: '123',
+                    country: 'AU'
+                },
+                email: 'someone@somewhere.com'
+            },
+            deliveryMethod: 'drone'
+        };
+        
+        axios.post('/orders.json', order)
+            .then(response => console.log(response))
+            .catch(error => console.log(error));
+
         this.setState(this.getStartingState());
         alert("Purchase Complete!");
     }
