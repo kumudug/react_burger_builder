@@ -4,16 +4,17 @@ import Model from '../../components/UI/Model/Model';
 
 const withErrorHandler = (WrappedComponent, axios) => {
     return class extends Component {
-        state = {
-            error: null
-        }
-
-        componentDidMount() {
+        constructor(props) {
+            super(props);
+            this.state = {
+                error: null
+            };
             axios.interceptors.request.use(req => {
                 this.setState({ error: null });
                 return req;
             });
             axios.interceptors.response.use(res => res, error => {
+                console.log(error);
                 this.setState({ error: error });
             });
         }

@@ -112,10 +112,12 @@ class BurgerBuilder extends Component {
     }
 
     getInitialIngredients() {
-        axios.get('https://react-my-burger-kumudu.firebaseio.com/ingredients.json')
-        .then(response => {
-            this.setState({ ingredients: response.data });
-        });
+        axios.get('/ingredients.json')
+            .then(response => {
+                if (response) {
+                    this.setState({ ingredients: response.data });
+                }
+            });
     }
 
     componentDidMount() {
