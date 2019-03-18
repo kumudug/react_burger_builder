@@ -19,12 +19,7 @@ class BurgerBuilder extends Component {
 
     getStartingState() {
         return {
-            ingredients: {
-                salad: 0,
-                bacon: 0,
-                cheese: 0,
-                meat: 0
-            },
+            ingredients: null,
             totalPrice: 4,
             purchasable: false,
             purchasing: false,
@@ -106,13 +101,25 @@ class BurgerBuilder extends Component {
             .then(response => {
                 console.log(response);
                 this.setState(this.getStartingState());
+                this.getInitialIngredients();
                 alert("Purchase Complete!");
             })
-            .catch(error => { 
+            .catch(error => {
                 console.log(error);
                 this.setState({ loading: false });
                 alert(`Something went wrong: ${error}`);
-             });
+            });
+    }
+
+    getInitialIngredients() {
+        axios.get('https://react-my-burger-kumudu.firebaseio.com/ingredients.json')
+        .then(response => {
+            this.setState({ ingredients: response.data });
+        });
+    }
+
+    componentDidMount() {
+        this.getInitialIngredients();
     }
 
     render() {
@@ -122,11 +129,28 @@ class BurgerBuilder extends Component {
         for (let key in emptyIngredientInfo) {
             emptyIngredientInfo[key] = emptyIngredientInfo[key] <= 0;
         }
-        let orderSummary = <OrderSummary
-            ingredients={this.state.ingredients}
-            price={this.state.totalPrice}
-            cancel={this.purchaseCanceledHandler}
-            continue={this.purchaseContinueHandler} />;
+        let burger = (<Spinner />);
+        let orderSummary = null;
+        if (this.state.ingredients) {
+            burger = (
+                <React.Fragment>
+                    <Burger ingredients={this.state.ingredients} />
+                    <BuildControls
+                        ingredientAdded={this.addIngredientHandler}
+                        ingredientRemoved={this.removeIngredientHandler}
+                        emptyIngredientInfo={emptyIngredientInfo}
+                        price={this.state.totalPrice}
+                        purchasable={this.state.purchasable}
+                        orderBtnClicked={this.purchaseHandler} />
+                </React.Fragment>
+            );
+
+            orderSummary = <OrderSummary
+                ingredients={this.state.ingredients}
+                price={this.state.totalPrice}
+                cancel={this.purchaseCanceledHandler}
+                continue={this.purchaseContinueHandler} />;
+        }
         if (this.state.loading) {
             orderSummary = <Spinner />;
         }
@@ -135,14 +159,7 @@ class BurgerBuilder extends Component {
                 <Model show={this.state.purchasing} cancel={this.purchaseCanceledHandler}>
                     {orderSummary}
                 </Model>
-                <Burger ingredients={this.state.ingredients} />
-                <BuildControls
-                    ingredientAdded={this.addIngredientHandler}
-                    ingredientRemoved={this.removeIngredientHandler}
-                    emptyIngredientInfo={emptyIngredientInfo}
-                    price={this.state.totalPrice}
-                    purchasable={this.state.purchasable}
-                    orderBtnClicked={this.purchaseHandler} />
+                {burger}
             </React.Fragment>
         );
     }
