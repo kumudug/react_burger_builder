@@ -23,7 +23,7 @@ class BurgerBuilder extends Component {
             totalPrice: 4,
             purchasable: false,
             purchasing: false,
-            loading: false, 
+            loading: false,
             error: false
         };
     }
@@ -82,34 +82,35 @@ class BurgerBuilder extends Component {
     }
 
     purchaseContinueHandler = () => {
-        this.setState({ loading: true });
-        const order = {
-            ingredients: this.state.ingredients,
-            price: this.state.totalPrice,
-            customer: {
-                name: 'Name1 Surname',
-                address: {
-                    street: 'Test Str1',
-                    zipCode: '123',
-                    country: 'AU'
-                },
-                email: 'someone@somewhere.com'
-            },
-            deliveryMethod: 'drone'
-        };
+        this.props.history.push('/checkout');
+        // this.setState({ loading: true });
+        // const order = {
+        //     ingredients: this.state.ingredients,
+        //     price: this.state.totalPrice,
+        //     customer: {
+        //         name: 'Name1 Surname',
+        //         address: {
+        //             street: 'Test Str1',
+        //             zipCode: '123',
+        //             country: 'AU'
+        //         },
+        //         email: 'someone@somewhere.com'
+        //     },
+        //     deliveryMethod: 'drone'
+        // };
 
-        axios.post('/orders.json', order)
-            .then(response => {
-                console.log(response);
-                this.setState(this.getStartingState());
-                this.getInitialIngredients();
-                alert("Purchase Complete!");
-            })
-            .catch(error => {
-                console.log(error);
-                this.setState({ loading: false });
-                alert(`Something went wrong: ${error}`);
-            });
+        // axios.post('/orders.json', order)
+        //     .then(response => {
+        //         console.log(response);
+        //         this.setState(this.getStartingState());
+        //         this.getInitialIngredients();
+        //         alert("Purchase Complete!");
+        //     })
+        //     .catch(error => {
+        //         console.log(error);
+        //         this.setState({ loading: false });
+        //         alert(`Something went wrong: ${error}`);
+        //     });
     }
 
     getInitialIngredients() {
@@ -120,7 +121,7 @@ class BurgerBuilder extends Component {
                 }
             })
             .catch(error => {
-                this.setState({error: true});
+                this.setState({ error: true });
             });
     }
 

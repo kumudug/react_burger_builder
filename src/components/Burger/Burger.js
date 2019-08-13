@@ -1,10 +1,9 @@
 import React from 'react';
-
+// import { withRouter } from 'react-router-dom'; In order to get router props from an internal component
 import styles from './Burger.module.css';
 import BurgerIngredient from './BurgerIngredient/BurgerIngredient';
 
 const burger = (props) => {
-
     let transformedIngredients = Object.keys(props.ingredients)
         .map(igKey => {
             return [...Array(props.ingredients[igKey])].map((_, i) => {
@@ -15,7 +14,7 @@ const burger = (props) => {
             return arr.concat(el);
         }, []);
 
-    if(transformedIngredients.length == 0) {
+    if (transformedIngredients.length == 0) {
         transformedIngredients = <p>Please start adding ingredients !!!</p>;
     }
 
@@ -29,3 +28,4 @@ const burger = (props) => {
 };
 
 export default burger;
+// export default withRouter(burger); In order to get router props from an internal component
