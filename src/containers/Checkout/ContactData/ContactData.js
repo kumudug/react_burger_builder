@@ -40,6 +40,8 @@ class ContactData extends Component {
                 console.log(response);
                 this.setState({ loading: false });
                 alert("Purchase Complete!");
+                //In checkout we spread the props {...props} without that location data won't come here and this history.push won't work
+                this.props.history.push('/');
             })
             .catch(error => {
                 console.log(error);
